@@ -1,6 +1,8 @@
 package br.com.condesales.models;
 
-public class Mayor {
+import java.io.Serializable;
+
+public class Mayor implements Serializable {
 	private int count;
 	
 	private User user;

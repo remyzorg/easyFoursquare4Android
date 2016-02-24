@@ -1,6 +1,8 @@
 package br.com.condesales.models;
 
-public class UserContact {
+import java.io.Serializable;
+
+public class UserContact implements Serializable {
 	private String email;
 	private String facebook;
 	private String twitter;

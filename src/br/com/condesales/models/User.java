@@ -2,7 +2,9 @@ package br.com.condesales.models;
 
 import android.graphics.Bitmap;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
 
 	private long id;
 	private String firstName;

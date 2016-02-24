@@ -1,8 +1,11 @@
 package br.com.condesales.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Venue {
+public class Venue implements Serializable {
+
+	private static final long serialVersionUID = -230762417327973L;
 
 	private String id;
 
@@ -35,6 +38,8 @@ public class Venue {
 	private String url;
 
 	private boolean like;
+
+	public Venue () {}
 
 	public String getTimeZone() {
 		return timeZone;

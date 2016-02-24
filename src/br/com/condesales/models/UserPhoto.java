@@ -1,6 +1,8 @@
 package br.com.condesales.models;
 
-public class UserPhoto {
+import java.io.Serializable;
+
+public class UserPhoto implements Serializable {
 
 	private String prefix;
 	private String suffix;

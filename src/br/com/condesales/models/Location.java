@@ -1,6 +1,8 @@
 package br.com.condesales.models;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
 
 	private String address;
 
@@ -23,6 +25,8 @@ public class Location {
 	private String postalcode;
 
 	private String crossStreet;
+
+	public Location () { }
 
 	public String getPostalcode() {
 		return postalcode;
