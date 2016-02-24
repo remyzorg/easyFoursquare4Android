@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 
+import br.com.condesales.FoursquareApplication;
 import br.com.condesales.constants.FoursquareConstants;
 import br.com.condesales.criterias.VenuesCriteria;
 import br.com.condesales.listeners.FoursquareVenuesRequestListener;
@@ -30,14 +31,16 @@ import br.com.condesales.models.Venue;
 public class FoursquareVenuesNearbyRequest extends
         AsyncTask<String, Integer, ArrayList<Venue>> {
 
+    private FoursquareApplication mApp;
     private Activity mActivity;
     private ProgressDialog mProgress;
     private FoursquareVenuesRequestListener mListener;
     private VenuesCriteria mCriteria;
     private boolean sslExp;
 
-    public FoursquareVenuesNearbyRequest(Activity activity,
+    public FoursquareVenuesNearbyRequest(Activity activity, FoursquareApplication mApp,
                                          FoursquareVenuesRequestListener listener, VenuesCriteria criteria) {
+        this.mApp = mApp;
         mActivity = activity;
         mListener = listener;
         mCriteria = criteria;
@@ -88,7 +91,7 @@ public class FoursquareVenuesNearbyRequest extends
             if (!access_token.equals("")) {
                 uri = uri + "&oauth_token=" + access_token;
             } else {
-                uri = uri + "&client_id=" + FoursquareConstants.CLIENT_ID + "&client_secret=" + FoursquareConstants.CLIENT_SECRET;
+                uri = uri + "&client_id=" + mApp.get_CLIENT_ID() + "&client_secret=" + mApp.get_CLIENT_SECRET();
             }
 
             JSONObject venuesJson = executeHttpGet(uri);

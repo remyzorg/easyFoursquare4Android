@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import br.com.condesales.FoursquareApplication;
 import br.com.condesales.constants.FoursquareConstants;
 import br.com.condesales.criterias.TipsCriteria;
 import br.com.condesales.listeners.TipsRequestListener;
@@ -25,16 +26,18 @@ import br.com.condesales.models.Tip;
 public class TipsNearbyRequest extends
         AsyncTask<String, Integer, ArrayList<Tip>> {
 
+    private FoursquareApplication mApp;
     private Activity mActivity;
     private ProgressDialog mProgress;
     private TipsRequestListener mListener;
     private TipsCriteria mCriteria;
 
-    public TipsNearbyRequest(Activity activity,
+    public TipsNearbyRequest(Activity activity, FoursquareApplication mApp,
                              TipsRequestListener listener, TipsCriteria criteria) {
         mActivity = activity;
         mListener = listener;
         mCriteria = criteria;
+        this.mApp = mApp;
     }
 
     public TipsNearbyRequest(Activity activity, TipsCriteria criteria) {
@@ -79,7 +82,7 @@ public class TipsNearbyRequest extends
             if (!access_token.equals("")) {
                 uri = uri + "&oauth_token=" + access_token;
             } else {
-                uri = uri + "&client_id=" + FoursquareConstants.CLIENT_ID + "&client_secret=" + FoursquareConstants.CLIENT_SECRET;
+                uri = uri + "&client_id=" + mApp.get_CLIENT_ID() + "&client_secret=" + mApp.get_CLIENT_SECRET();
             }
             
             JSONObject tipsJson = executeHttpGet(uri);

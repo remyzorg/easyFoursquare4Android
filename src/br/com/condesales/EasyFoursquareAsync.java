@@ -2,6 +2,7 @@ package br.com.condesales;
 
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.SharedPreferences;
 
 import br.com.condesales.constants.FoursquareConstants;
@@ -18,6 +19,7 @@ import br.com.condesales.listeners.FriendsListener;
 import br.com.condesales.listeners.GetCheckInsListener;
 import br.com.condesales.listeners.TipsRequestListener;
 import br.com.condesales.listeners.UserInfoRequestListener;
+import br.com.condesales.listeners.VenuePhotosListener;
 import br.com.condesales.listeners.VenuesHistoryListener;
 import br.com.condesales.tasks.checkins.CheckInRequest;
 import br.com.condesales.tasks.tips.TipsNearbyRequest;
@@ -28,6 +30,7 @@ import br.com.condesales.tasks.users.SelfInfoRequest;
 import br.com.condesales.tasks.venues.FoursquareTrendingVenuesNearbyRequest;
 import br.com.condesales.tasks.venues.FoursquareVenueDetailsRequest;
 import br.com.condesales.tasks.venues.FoursquareVenuesNearbyRequest;
+import br.com.condesales.tasks.venues.GetVenuePhotosRequest;
 
 /**
  * Class to handle methods used to perform requests to FoursquareAPI and respond
@@ -38,11 +41,13 @@ import br.com.condesales.tasks.venues.FoursquareVenuesNearbyRequest;
 public class EasyFoursquareAsync {
 
     private Activity mActivity;
+    private FoursquareApplication mApp;
     private FoursquareDialog mDialog;
     private String mAccessToken = "";
 
-    public EasyFoursquareAsync(Activity activity) {
+    public EasyFoursquareAsync(Activity activity, FoursquareApplication mApp) {
         mActivity = activity;
+        this.mApp = this.mApp;
     }
 
     /**
@@ -88,7 +93,7 @@ public class EasyFoursquareAsync {
     public void getVenuesNearby(FoursquareVenuesRequestListener listener,
                                 VenuesCriteria criteria) {
         FoursquareVenuesNearbyRequest request = new FoursquareVenuesNearbyRequest(
-                mActivity, listener, criteria);
+                mActivity, mApp, listener, criteria);
         request.execute(getAccessToken());
     }
 
@@ -102,7 +107,7 @@ public class EasyFoursquareAsync {
     public void getTipsNearby(TipsRequestListener listener,
                               TipsCriteria criteria) {
         TipsNearbyRequest request = new TipsNearbyRequest(
-                mActivity, listener, criteria);
+                mActivity, mApp, listener, criteria);
         request.execute(getAccessToken());
     }
 
@@ -114,13 +119,13 @@ public class EasyFoursquareAsync {
      * @param criteria The criteria to your search request
      */
     public void getTrendingVenuesNearby(FoursquareTrendingVenuesRequestListener listener, TrendingVenuesCriteria criteria) {
-        FoursquareTrendingVenuesNearbyRequest request = new FoursquareTrendingVenuesNearbyRequest(mActivity, listener, criteria);
+        FoursquareTrendingVenuesNearbyRequest request = new FoursquareTrendingVenuesNearbyRequest(mActivity, mApp, listener, criteria);
         request.execute(getAccessToken());
 
     }
 
     public void getVenueDetail(String venueID, FoursquareVenueDetailsRequestListener listener) {
-        FoursquareVenueDetailsRequest request = new FoursquareVenueDetailsRequest(mActivity, listener, venueID);
+        FoursquareVenueDetailsRequest request = new FoursquareVenueDetailsRequest(mActivity, mApp, listener, venueID);
         request.execute(getAccessToken());
     }
 
@@ -172,7 +177,7 @@ public class EasyFoursquareAsync {
     }
 
     public void getVenuePhotos(String venueID, VenuePhotosListener listener) {
-        GetVenuePhotosRequest request = new GetVenuePhotosRequest(mActivity, listener, venueID);
+        GetVenuePhotosRequest request = new GetVenuePhotosRequest(mApp, listener, venueID);
         request.execute(getAccessToken());
     }
 
@@ -196,11 +201,11 @@ public class EasyFoursquareAsync {
      */
     private void loginDialog(AccessTokenRequestListener listener) {
         String url = "https://foursquare.com/oauth2/authenticate"
-                + "?client_id=" + FoursquareConstants.CLIENT_ID
+                + "?client_id=" + mApp.get_CLIENT_ID()
                 + "&response_type=code" + "&redirect_uri="
                 + FoursquareConstants.CALLBACK_URL;
 
-        mDialog = new FoursquareDialog(mActivity, url, listener);
+        mDialog = new FoursquareDialog(mActivity, mApp, url, listener);
         mDialog.show();
     }
 

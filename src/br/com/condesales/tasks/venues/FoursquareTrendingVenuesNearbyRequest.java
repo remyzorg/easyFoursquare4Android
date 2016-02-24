@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import br.com.condesales.FoursquareApplication;
 import br.com.condesales.constants.FoursquareConstants;
 import br.com.condesales.criterias.TrendingVenuesCriteria;
 import br.com.condesales.listeners.FoursquareTrendingVenuesRequestListener;
@@ -25,13 +26,15 @@ import br.com.condesales.models.Venue;
 public class FoursquareTrendingVenuesNearbyRequest extends
         AsyncTask<String, Integer, ArrayList<Venue>> {
 
+    private FoursquareApplication mApp;
     private Activity mActivity;
     private ProgressDialog mProgress;
     private FoursquareTrendingVenuesRequestListener mListener;
     private TrendingVenuesCriteria mCriteria;
 
-    public FoursquareTrendingVenuesNearbyRequest(Activity activity,
+    public FoursquareTrendingVenuesNearbyRequest(Activity activity, FoursquareApplication mApp,
                                                  FoursquareTrendingVenuesRequestListener listener, TrendingVenuesCriteria criteria) {
+        this.mApp = mApp;
         mActivity = activity;
         mListener = listener;
         mCriteria = criteria;
@@ -79,7 +82,7 @@ public class FoursquareTrendingVenuesNearbyRequest extends
             if (!access_token.equals("")) {
                 uri = uri + "&oauth_token=" + access_token;
             } else {
-                uri = uri + "&client_id=" + FoursquareConstants.CLIENT_ID + "&client_secret=" + FoursquareConstants.CLIENT_SECRET;
+                uri = uri + "&client_id=" + mApp.get_CLIENT_ID()  + "&client_secret=" + mApp.get_CLIENT_SECRET();
             }
             
             JSONObject venuesJson = executeHttpGet(uri);

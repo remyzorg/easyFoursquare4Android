@@ -45,13 +45,15 @@ public class FoursquareDialog extends Dialog {
 	private LinearLayout mContent;
 	private TextView mTitle;
 	private Activity mActivity;
+	private FoursquareApplication mApp;
 
 	private static final String TAG = "Foursquare-WebView";
 
-	public FoursquareDialog(Activity activity, String url,
+	public FoursquareDialog(Activity activity, FoursquareApplication mApp, String url,
 			AccessTokenRequestListener listener) {
 		super(activity);
 		mActivity = activity;
+		this.mApp = mApp;
 		mUrl = url;
 		mListener = listener;
 	}
@@ -127,7 +129,7 @@ public class FoursquareDialog extends Dialog {
 
 			if (url.startsWith(FoursquareConstants.CALLBACK_URL)) {
 				String urls[] = url.split("=");
-				AccessTokenRequest request = new AccessTokenRequest(mActivity, mListener);
+				AccessTokenRequest request = new AccessTokenRequest(mActivity, mApp, mListener);
 				request.execute(urls[1]);
 				FoursquareDialog.this.dismiss();
 				return true;

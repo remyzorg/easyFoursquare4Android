@@ -12,7 +12,9 @@ import br.com.condesales.criterias.TipsCriteria;
 import br.com.condesales.criterias.TrendingVenuesCriteria;
 import br.com.condesales.criterias.VenuesCriteria;
 import br.com.condesales.listeners.AccessTokenRequestListener;
+import br.com.condesales.listeners.VenuePhotosListener;
 import br.com.condesales.models.Checkin;
+import br.com.condesales.models.PhotosGroup;
 import br.com.condesales.models.Tip;
 import br.com.condesales.models.User;
 import br.com.condesales.models.Venue;
@@ -26,6 +28,7 @@ import br.com.condesales.tasks.users.SelfInfoRequest;
 import br.com.condesales.tasks.venues.FoursquareTrendingVenuesNearbyRequest;
 import br.com.condesales.tasks.venues.FoursquareVenueDetailsRequest;
 import br.com.condesales.tasks.venues.FoursquareVenuesNearbyRequest;
+import br.com.condesales.tasks.venues.GetVenuePhotosRequest;
 
 /**
  * Class to handle methods used to perform requests to FoursquareAPI and respond
@@ -35,12 +38,14 @@ import br.com.condesales.tasks.venues.FoursquareVenuesNearbyRequest;
  */
 public class EasyFoursquare {
 
+    private FoursquareApplication mApp;
     private Activity mActivity;
     private FoursquareDialog mDialog;
     private String mAccessToken = "";
 
-    public EasyFoursquare(Activity activity) {
+    public EasyFoursquare(Activity activity, FoursquareApplication mApp) {
         mActivity = activity;
+        this.mApp = mApp;
     }
 
     /**
@@ -244,8 +249,8 @@ public class EasyFoursquare {
         return users;
     }
 
-    public PhotosGroup getVenuePhotos(String venueID) {
-        GetVenuePhotosRequest request = new GetVenuePhotosRequest(mActivity, venueID);
+    public PhotosGroup getVenuePhotos(VenuePhotosListener listener, String venueID) {
+        GetVenuePhotosRequest request = new GetVenuePhotosRequest(mApp, listener, venueID);
         request.execute(getAccessToken());
         PhotosGroup photosGroup = null;
         try {
@@ -283,11 +288,11 @@ public class EasyFoursquare {
      */
     private void loginDialog(AccessTokenRequestListener listener) {
         String url = "https://foursquare.com/oauth2/authenticate"
-                + "?client_id=" + FoursquareConstants.CLIENT_ID
+                + "?client_id=" + mApp.get_CLIENT_ID()
                 + "&response_type=code" + "&redirect_uri="
                 + FoursquareConstants.CALLBACK_URL;
 
-        mDialog = new FoursquareDialog(mActivity, url, listener);
+        mDialog = new FoursquareDialog(mActivity, mApp, url, listener);
         mDialog.show();
     }
 

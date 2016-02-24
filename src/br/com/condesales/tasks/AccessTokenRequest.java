@@ -15,18 +15,22 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
+
+import br.com.condesales.FoursquareApplication;
 import br.com.condesales.constants.FoursquareConstants;
 import br.com.condesales.listeners.AccessTokenRequestListener;
 
 public class AccessTokenRequest extends AsyncTask<String, Integer, String> {
 
+	private FoursquareApplication mApp;
 	private Activity mActivity;
 	private ProgressDialog mProgress;
 	private AccessTokenRequestListener mListener;
 
-	public AccessTokenRequest(Activity activity, AccessTokenRequestListener listener) {
+	public AccessTokenRequest(Activity activity, FoursquareApplication mApp, AccessTokenRequestListener listener) {
 		mActivity = activity;
 		mListener = listener;
+		this.mApp = mApp;
 	}
 
 	@Override
@@ -49,9 +53,9 @@ public class AccessTokenRequest extends AsyncTask<String, Integer, String> {
 				// Call Foursquare again to get the access token
 				JSONObject tokenJson = executeHttpGet("https://foursquare.com/oauth2/access_token"
 						+ "?client_id="
-						+ FoursquareConstants.CLIENT_ID
+						+ mApp.get_CLIENT_ID()
 						+ "&client_secret="
-						+ FoursquareConstants.CLIENT_SECRET
+						+ mApp.get_CLIENT_SECRET()
 						+ "&grant_type=authorization_code"
 						+ "&redirect_uri="
                         + FoursquareConstants.CALLBACK_URL

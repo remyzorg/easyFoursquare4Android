@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import br.com.condesales.FoursquareApplication;
 import br.com.condesales.constants.FoursquareConstants;
 import br.com.condesales.listeners.VenuePhotosListener;
 import br.com.condesales.models.PhotoItem;
@@ -31,10 +32,12 @@ import br.com.condesales.models.Venue;
 
 public class GetVenuePhotosRequest extends AsyncTask<String, Integer, PhotosGroup> {
 
+    FoursquareApplication mApp;
     private VenuePhotosListener mListener;
     private String mVenueID;
 
-    public GetVenuePhotosRequest(Activity activity, VenuePhotosListener listener, String venueID) {
+    public GetVenuePhotosRequest(FoursquareApplication mApp, VenuePhotosListener listener, String venueID) {
+        this.mApp = mApp;
         mListener = listener;
         mVenueID = venueID;
     }
@@ -58,7 +61,7 @@ public class GetVenuePhotosRequest extends AsyncTask<String, Integer, PhotosGrou
             if (!access_token.equals("")) {
                 uri = uri + "&oauth_token=" + access_token;
             } else {
-                uri = uri + "&client_id=" + FoursquareConstants.CLIENT_ID + "&client_secret=" + FoursquareConstants.CLIENT_SECRET;
+                uri = uri + "&client_id=" + mApp.get_CLIENT_ID() + "&client_secret=" + mApp.get_CLIENT_SECRET();
             }
 
             JSONObject photosJson = executeHttpGet(uri);

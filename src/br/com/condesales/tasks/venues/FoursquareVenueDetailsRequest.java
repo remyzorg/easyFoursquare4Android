@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import br.com.condesales.FoursquareApplication;
 import br.com.condesales.constants.FoursquareConstants;
 import br.com.condesales.listeners.FoursquareVenueDetailsRequestListener;
 import br.com.condesales.models.Venue;
@@ -22,13 +23,15 @@ import br.com.condesales.models.Venue;
 public class FoursquareVenueDetailsRequest extends
         AsyncTask<String, Integer, Venue> {
 
+    private FoursquareApplication mApp;
     private Activity mActivity;
     private ProgressDialog mProgress;
     private FoursquareVenueDetailsRequestListener mListener;
     private String mVenueID;
 
-    public FoursquareVenueDetailsRequest(Activity activity,
+    public FoursquareVenueDetailsRequest(Activity activity, FoursquareApplication mApp,
                                          FoursquareVenueDetailsRequestListener listener, String venueID) {
+        this.mApp = mApp;
         mActivity = activity;
         mListener = listener;
         mVenueID = venueID;
@@ -65,7 +68,7 @@ public class FoursquareVenueDetailsRequest extends
             if (!access_token.equals("")) {
                 uri = uri + "&oauth_token=" + access_token;
             } else {
-                uri = uri + "&client_id=" + FoursquareConstants.CLIENT_ID + "&client_secret=" + FoursquareConstants.CLIENT_SECRET;
+                uri = uri + "&client_id=" + mApp.get_CLIENT_ID() + "&client_secret=" + mApp.get_CLIENT_SECRET();
             }
             
             JSONObject venuesJson = executeHttpGet(uri);
