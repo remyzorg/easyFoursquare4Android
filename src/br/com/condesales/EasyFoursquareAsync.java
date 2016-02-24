@@ -47,7 +47,7 @@ public class EasyFoursquareAsync {
 
     public EasyFoursquareAsync(Activity activity, FoursquareApplication mApp) {
         mActivity = activity;
-        this.mApp = this.mApp;
+        this.mApp = mApp;
     }
 
     /**

@@ -85,7 +85,7 @@ public class EasyFoursquare {
      */
     public ArrayList<Venue> getVenuesNearby(VenuesCriteria criteria) {
         FoursquareVenuesNearbyRequest request = new FoursquareVenuesNearbyRequest(
-                mActivity, criteria);
+                mActivity, mApp, criteria);
         request.execute(getAccessToken());
         ArrayList<Venue> venues = new ArrayList<Venue>();
         try {

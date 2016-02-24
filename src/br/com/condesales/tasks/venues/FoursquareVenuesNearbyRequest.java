@@ -46,17 +46,14 @@ public class FoursquareVenuesNearbyRequest extends
         mCriteria = criteria;
     }
 
-    public FoursquareVenuesNearbyRequest(Activity activity, VenuesCriteria criteria) {
+    public FoursquareVenuesNearbyRequest(Activity activity, FoursquareApplication mApp, VenuesCriteria criteria) {
+        this.mApp = mApp;
         mActivity = activity;
         mCriteria = criteria;
     }
 
     @Override
     protected void onPreExecute() {
-        mProgress = new ProgressDialog(mActivity);
-        mProgress.setCancelable(false);
-        mProgress.setMessage("Getting venues nearby ...");
-        mProgress.show();
         super.onPreExecute();
     }
 
@@ -134,7 +131,6 @@ public class FoursquareVenuesNearbyRequest extends
             mActivity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com")));
         }
 
-        mProgress.dismiss();
         if (mListener != null)
             mListener.onVenuesFetched(venues);
         super.onPostExecute(venues);
